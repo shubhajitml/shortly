@@ -73,6 +73,15 @@ section {
 
     </style>
 </head>
+
+<body>
+  {% if messages %}
+          {% for message in messages %}
+          <script>alert("{{ message }}")</script>
+          {% endfor %}
+  {% endif %}
+</body>
+
 <main>
   <h1>URL Shortener</h1>
   <form id="post-form">
