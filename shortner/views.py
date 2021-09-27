@@ -13,17 +13,17 @@ def index(request):
 def shortenUrl(request):
         if request.method == "POST":
             url = request.POST['link']
-        if validators.url(url):
-            if(Url.objects.filter(link=url).exists()):
-                uid = Url.objects.get(link=url).uuid
+            if validators.url(url):
+                if(Url.objects.filter(link=url).exists()):
+                    uid = Url.objects.get(link=url).uuid
+                else:
+                    uid = str(uuid.uuid4())[:5]
+                    new_url = Url(link=url, uuid=uid)
+                    new_url.save()
+                return HttpResponse(uid)
             else:
-                uid = str(uuid.uuid4())[:5]
-                new_url = Url(link=url, uuid=uid)
-                new_url.save()
-            return HttpResponse(uid)
-        else:
-            messages.info(request, "Entered URL is not valid!")
-            return HttpResponseRedirect('index.html')
+                messages.info(request, "Entered URL is not valid!")
+                return HttpResponseRedirect('index.html')
 
 def redirectUrl(request, hash_value):
     long_url_details = Url.objects.get(uuid=hash_value)
